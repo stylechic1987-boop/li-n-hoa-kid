@@ -10,9 +10,17 @@ Trạng thái: **CHỜ DUYỆT**, chưa có migration.
 - Quyền xác định bằng `user_roles` + hàm `has_role()`, không tin claim do client gửi.
 
 ## Quyết định cần duyệt
-- **Q1.** Hồ sơ trẻ (`learner_profiles`) là bản ghi do phụ huynh sở hữu (`owner_id`), không bắt buộc có tài khoản `auth.users` riêng. Người lớn tự học: tài khoản vừa là chủ vừa là học viên (`owner_id = auth_user_id`, `is_self = true`).
-- **Q2.** `parent_learner_links` vẫn giữ để một hồ sơ có thể liên kết thêm phụ huynh thứ hai (ví dụ mẹ và bố) và để phân quyền xem.
-- **Q3.** `parental_consents` ghi phiên bản chính sách, thời điểm, phương thức xác nhận; bắt buộc trước khi tạo hồ sơ dưới 16 tuổi (ngưỡng cần đối chiếu pháp luật VN).
+Đã chốt theo chỉ đạo ngày 2026-11-21: **học sinh tự đăng ký tài khoản**.
+- **Q1 (chốt).** Mỗi học viên có tài khoản `auth.users` riêng. `learner_profiles.user_id` trỏ tới tài khoản đó. Phụ huynh vẫn có thể tạo hồ sơ cho trẻ nhỏ chưa tự đăng nhập: khi đó `user_id` rỗng và `owner_id` là phụ huynh; sau này trẻ có thể được cấp tài khoản và gán `user_id`.
+- **Q2 (chốt).** `parent_learner_links` là cơ chế liên kết phụ huynh với học viên, gồm cả trường hợp học sinh đã đăng ký trước rồi mới mời phụ huynh. `status`: `pending` (đã mời/đã yêu cầu), `active` (đã xác nhận), `revoked`. Phụ huynh chỉ xem dữ liệu khi `active`.
+- **Q3 (chốt hướng, ngưỡng tuổi còn mở).** `parental_consents` ghi phiên bản chính sách, thời điểm, phương thức, email phụ huynh. Học sinh dưới ngưỡng tuổi (tạm 16, **cần đối chiếu pháp luật VN**) đăng ký xong ở trạng thái `pending_parent`: được vào xem giới thiệu nhưng chưa lưu dữ liệu học cho đến khi phụ huynh xác nhận qua email. Từ ngưỡng tuổi trở lên tự đồng ý. Người lớn tự học: `owner_id = user_id`, `is_self = true`.
+
+### Luồng đăng ký học sinh
+1. Học sinh đăng ký email + mật khẩu (Supabase Auth, xác thực email).
+2. Chọn nhóm tuổi / năm sinh, trình độ, mục tiêu.
+3. Nếu dưới ngưỡng tuổi: nhập email phụ huynh → hệ thống tạo `parental_consents` (chờ) và `parent_learner_links` (`pending`) → gửi email xác nhận.
+4. Phụ huynh xác nhận (đăng nhập hoặc tạo tài khoản PARENT) → consent `active`, link `active`, học sinh được kích hoạt đầy đủ.
+5. Nếu quá hạn không xác nhận, hồ sơ giữ ở trạng thái chờ và bị xóa theo chính sách lưu giữ (thời hạn cần chốt).
 
 ## Sơ đồ quan hệ chính
 ```mermaid
@@ -59,9 +67,9 @@ erDiagram
 |---|---|
 | `profiles` | id (= auth.users.id), display_name, phone?, created_at |
 | `user_roles` | user_id, role (`SUPER_ADMIN/ADMIN/CONTENT_EDITOR/PARENT/LEARNER`), UNIQUE(user_id, role) |
-| `learner_profiles` | id, owner_id → profiles, display_name, avatar, age_group, birth_year?, level, goal, is_self, status, xp_total, streak_days, last_study_date |
-| `parent_learner_links` | parent_id, learner_id, status, UNIQUE(parent_id, learner_id) |
-| `parental_consents` | learner_id, parent_id, policy_version, consented_at, method, revoked_at? |
+| `learner_profiles` | id, user_id? → auth.users (UNIQUE), owner_id → profiles, display_name, avatar, age_group, birth_year?, level, goal, is_self, status (`pending_parent/active/suspended`), xp_total, streak_days, last_study_date |
+| `parent_learner_links` | parent_id?, parent_email, learner_id, status (`pending/active/revoked`), UNIQUE(parent_email, learner_id) |
+| `parental_consents` | learner_id, parent_email, parent_id?, policy_version, token_hash, requested_at, consented_at?, method, revoked_at? |
 | `user_settings` | user_id, locale, sound_on, reminder_time |
 
 ### Học liệu

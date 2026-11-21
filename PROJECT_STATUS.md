@@ -18,8 +18,11 @@ Không có (chưa có code).
 ## Quyết định kiến trúc
 - D-01: Repo Git cục bộ tại `lien-hoa-kid/`, người quản lý tự đẩy lên remote sau.
 - D-02: Stack theo Master Prompt: React + TypeScript + Vite, Supabase (Auth, PostgreSQL, Storage), PWA.
-- D-03: Học viên trẻ em là hồ sơ do phụ huynh quản lý, không có tài khoản đăng nhập riêng ở bản 1.0 (đề xuất, chờ duyệt).
+- D-03 (chốt 2026-11-21): Học sinh tự đăng ký tài khoản riêng. Dưới ngưỡng tuổi cần phụ huynh xác nhận (ngưỡng tạm 16, chờ đối chiếu pháp luật VN). Phụ huynh vẫn có thể tạo hồ sơ cho trẻ nhỏ.
 - D-04: XP/điểm ghi qua hàm RPC phía máy chủ, khóa ghi trực tiếp từ client.
+- D-05 (chốt 2026-11-21): Chưa có project Supabase cloud; phát triển bằng Supabase local qua Docker (xem `docs/SETUP_LOCAL.md`).
+- D-06 (chốt 2026-11-21): Giữ nguyên cấu trúc 30 bảng và cây thư mục; tài liệu do AI viết.
+- D-07: Giữ phạm vi full, gắn mức P1/P2 trong `docs/SRS.md` để ưu tiên theo tiến độ.
 
 ## Thay đổi database
 Chưa có migration nào. ERD: `docs/ERD.md` (chờ duyệt trước khi viết migration).
@@ -36,11 +39,13 @@ Chưa có.
 ## Chi phí phát sinh
 0 đ. Hạ tầng dự kiến: Supabase Free khi phát triển; gói trả phí khi chạy thật (cần xác nhận giá hiện hành).
 
+## Tài liệu đã viết
+`docs/BRD.md`, `docs/SRS.md`, `docs/ERD.md`, `docs/PERMISSIONS.md`, `docs/SETUP_LOCAL.md`.
+
 ## Chờ xác nhận
-- Supabase: project mới hay chạy local?
-- Phạm vi: MVP thu gọn hay full?
-- Học liệu: đã có hay soạn bộ mẫu?
-- Duyệt ERD và ma trận phân quyền.
+- Ngưỡng tuổi cần phụ huynh xác nhận (tạm 16) và thời hạn lưu hồ sơ chưa xác nhận.
+- Học liệu: đã có hay soạn bộ mẫu? Nguồn âm thanh phát âm.
+- Duyệt ERD (bản cập nhật) và ma trận phân quyền.
 
 ## Công việc tiếp theo
-Duyệt `docs/ERD.md` và `docs/PERMISSIONS.md`, sau đó viết migration (Giai đoạn 2).
+Sau khi duyệt: Giai đoạn 2, viết migration SQL, RLS, RPC; kiểm thử trên Postgres 16 và qua `supabase db reset` trên máy có Docker.

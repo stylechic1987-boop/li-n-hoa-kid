@@ -9,7 +9,7 @@ Ký hiệu: R = đọc, C = tạo, U = sửa, D = xóa, own = chỉ dữ liệu 
 | `profiles` | RUD | R, U (không đổi quyền) | – | R/U own | R/U own |
 | `user_roles` | CRUD | R; cấp/thu ADMIN: không; cấp PARENT/LEARNER/EDITOR: có | – | R own | R own |
 | `learner_profiles` | CRUD | RU | – | CRUD owned/linked | R/U own (trường giới hạn) |
-| `parent_learner_links`, `parental_consents` | CRUD | R | – | C/R own, thu hồi consent | R own |
+| `parent_learner_links`, `parental_consents` | CRUD | R | – | R/xác nhận/thu hồi own (qua RPC theo token) | C yêu cầu liên kết (nhập email phụ huynh), R own |
 | courses, levels, units, lessons | CRUD | CRUD | CRUD | R pub | R pub |
 | vocabulary, media, examples | CRUD | CRUD | CRUD | R pub | R pub |
 | quizzes, questions | CRUD | CRUD | CRUD | R pub | R pub (không thấy `is_correct`) |
