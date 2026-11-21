@@ -9,3 +9,4 @@
 - Thêm bản thiết kế ERD và ma trận phân quyền (chờ duyệt).
 - Chốt: học sinh tự đăng ký, dùng Supabase local qua Docker, giữ nguyên 30 bảng.
 - Thêm `docs/BRD.md`, `docs/SRS.md`, `docs/SETUP_LOCAL.md`, `.env.example`; cập nhật ERD và phân quyền theo luồng đăng ký học sinh.
+- Đẩy repo lên GitHub `stylechic1987-boop/li-n-hoa-kid`; giữ nguyên `lang-game-viet`.

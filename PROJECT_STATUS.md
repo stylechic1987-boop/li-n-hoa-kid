@@ -16,7 +16,7 @@ Giai đoạn 1 (Phân tích và thiết kế): đang làm. Chưa có code sản 
 Không có (chưa có code).
 
 ## Quyết định kiến trúc
-- D-01: Repo Git cục bộ tại `lien-hoa-kid/`, người quản lý tự đẩy lên remote sau.
+- D-01: Source code lưu tại GitHub `stylechic1987-boop/li-n-hoa-kid` (nhánh `main`). Repo `lang-game-viet` là dự án khác, giữ nguyên, không ghi đè.
 - D-02: Stack theo Master Prompt: React + TypeScript + Vite, Supabase (Auth, PostgreSQL, Storage), PWA.
 - D-03 (chốt 2026-11-21): Học sinh tự đăng ký tài khoản riêng. Dưới ngưỡng tuổi cần phụ huynh xác nhận (ngưỡng tạm 16, chờ đối chiếu pháp luật VN). Phụ huynh vẫn có thể tạo hồ sơ cho trẻ nhỏ.
 - D-04: XP/điểm ghi qua hàm RPC phía máy chủ, khóa ghi trực tiếp từ client.
